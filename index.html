@@ -2,31 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   margin: 0;
-  background: linear-gradient(135deg, #ffb6c1, #ff69b4);
   height: 100vh;
+  background: linear-gradient(135deg, #ffb6c1, #ff69b4);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
-.container {
-  background: rgba(255,255,255,0.2);
+.card {
+  background: rgba(255,255,255,0.25);
   padding: 30px;
   border-radius: 30px;
-  box-shadow: 0 0 40px rgba(255,105,180,0.8);
   text-align: center;
   max-width: 420px;
   color: white;
 }
 
-.character-box {
+.img-box {
   width: 240px;
   height: 215px;
   overflow: hidden;
@@ -34,113 +33,93 @@ body {
   margin: 0 auto 20px;
 }
 
-.character-box img {
+.img-box img {
   width: 100%;
   transform: translateY(-15px);
 }
 
-#text {
-  min-height: 90px;
-  font-size: 1.15rem;
-}
-
 button {
-  background: #ff4f9a;
+  margin-top: 15px;
+  padding: 12px 26px;
   border: none;
-  color: white;
-  padding: 12px 24px;
   border-radius: 25px;
+  background: #ff4f9a;
+  color: white;
   font-size: 1rem;
   cursor: pointer;
-  margin-top: 12px;
 }
 
 button:hover {
   background: #ff2f84;
-}
-
-.final {
-  display: none;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a5c8f76a1.mp3">
-</audio>
-
-<div class="container" id="main">
-  <div class="character-box">
+<div class="card">
+  <div class="img-box">
     <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXQ1ODZwaDBiY3RrM20ybXQ1eHd1OGxlbW00MW1zOG9mNHAyd3phOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cOt4lNOelYkY0cHzLa/giphy.gif">
   </div>
 
   <div id="text">Oh hi… I didn’t see you there.</div>
-  <button onclick="next()">Hello</button>
-</div>
-
-<div class="container final" id="final">
-  <h2>💖 Will you be my Valentine? 💖</h2>
-  <button onclick="yes()">YES 💕</button>
+  <button id="btn">Hello</button>
 </div>
 
 <script>
-let step = 0;
+const lines = [
+  "Oh hi… I didn’t see you there.",
+  "Since you're here… I have something to tell you.",
+  "It's a poem.",
+  "Okay… listen closely, nya~",
+  "💖 [YOUR POEM LINE 1] 💖",
+  "💖 [YOUR POEM LINE 2] 💖",
+  "Will you be my Valentine?"
+];
+
+let index = 0;
 let voices = [];
 
-speechSynthesis.onvoiceschanged = () => {
+// Load voices safely
+function loadVoices() {
   voices = speechSynthesis.getVoices();
-};
-
-const scenes = [
-  "Since you’re here… I have something to tell you.",
-  "It’s a poem.",
-  "Okay… listen closely, nya~ 💗",
-  "[POEM LINE 1]",
-  "[POEM LINE 2]",
-  "[POEM LINE 3]",
-  "[POEM LINE 4]"
-];
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
 
 function speak(text) {
   speechSynthesis.cancel();
 
-  const u = new SpeechSynthesisUtterance(text);
+  const utter = new SpeechSynthesisUtterance(text);
 
-  const voice =
+  // Pick cutest available voice
+  const cuteVoice =
     voices.find(v => v.name.includes("Samantha")) ||
     voices.find(v => v.name.toLowerCase().includes("female")) ||
     voices[0];
 
-  if (voice) u.voice = voice;
+  if (cuteVoice) utter.voice = cuteVoice;
 
-  u.pitch = 1.8;   // VERY CUTE / CAT-LIKE
-  u.rate = 1.05;
-  u.volume = 1;
+  utter.pitch = 1.9; // cat-like
+  utter.rate = 1.05;
 
-  speechSynthesis.speak(u);
+  speechSynthesis.speak(utter);
 }
 
-function next() {
-  // unlock audio
-  document.getElementById("music").play().catch(()=>{});
+document.getElementById("btn").onclick = () => {
+  speak(lines[index]);
+  document.getElementById("text").innerText = lines[index];
 
-  if (step < scenes.length) {
-    document.getElementById("text").innerText = scenes[step];
-    speak(scenes[step]);
-    step++;
+  index++;
+
+  if (index >= lines.length) {
+    document.getElementById("btn").innerText = "YES 💕";
+  } else if (index === lines.length - 1) {
+    document.getElementById("btn").innerText = "Continue 💖";
   } else {
-    document.getElementById("main").style.display = "none";
-    document.getElementById("final").style.display = "block";
-    speak("Will you be my Valentine?");
+    document.getElementById("btn").innerText = "Next";
   }
-}
-
-function yes() {
-  speak("Yayyy! You just made this little cat very happy!");
-  alert("💘 SHE SAID YES 💘");
-}
+};
 </script>
 
 </body>
