@@ -3,76 +3,189 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hi There 💌</title>
+  <title>Will You Be My Valentine?</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      font-family: 'Nunito', sans-serif;
+      background: radial-gradient(circle at top, #ffb6c1, #ff69b4);
+      color: #fff;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      text-align: center;
+      overflow: hidden;
     }
 
-    .card {
-      background: white;
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      max-width: 400px;
-      animation: fadeIn 1s ease;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.6);
+    }
+
+    img.creature {
+      width: 140px;
+      margin-bottom: 15px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    #text {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      min-height: 80px;
     }
 
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
+      background: #ff4f9a;
       border: none;
-      border-radius: 20px;
-      background: #ff69b4;
       color: white;
-      font-size: 16px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 20px;
       cursor: pointer;
+      margin: 5px;
+      transition: transform 0.2s, background 0.2s;
     }
 
     button:hover {
-      background: #ff1493;
+      background: #ff2f84;
+      transform: scale(1.05);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.7);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-10%); }
+      to { transform: translateY(110vh); }
+    }
+
+    .final {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .final h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <p id="text">Oh hi… I didn’t see you there 👀</p>
-    <button id="btn">Hello</button>
+
+  <!-- Background Music -->
+  <audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a5c8f76a1.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="container" id="main">
+    <img src="https://i.imgur.com/8Km9tLL.png" alt="cute creature" class="creature" />
+    <div id="text">Oh hi… I didn’t see you there.</div>
+    <div id="buttons">
+      <button onclick="next()">Hello</button>
+    </div>
+  </div>
+
+  <div class="container final" id="final">
+    <h1>Will you be my Valentine? 💖</h1>
+    <img src="https://i.imgur.com/4AiXzf8.png" width="200" />
+    <div>
+      <button onclick="yes()">Yes 💕</button>
+      <button onclick="yes()">Yes obviously 💘</button>
+    </div>
   </div>
 
   <script>
-    const text = document.getElementById("text");
-    const btn = document.getElementById("btn");
-
-    const scenes = [
-      { msg: "Since you’re here, I have something to tell you…", btn: "Oh cool, what is it?" },
-      { msg: "It’s a poem 💖", btn: "Can I hear it?" },
-      { msg: "Sure…", btn: "✨" },
-      { msg: "[PUT YOUR POEM HERE]\n\n(line 1)\n(line 2)\n(line 3)", btn: "❤️" },
-      { msg: "Will you be my Valentine? 💘", btn: "Yes 💕" }
+    const steps = [
+      { text: "Oh hi… I didn’t see you there.", buttons: ["Hello"] },
+      { text: "Since you’re here, I have something to tell you…", buttons: ["Oh cool, what is it?"] },
+      { text: "It’s a poem.", buttons: ["Can I hear it?"] },
+      { text: "Sure…", buttons: ["Read the poem"] }
     ];
 
     let step = 0;
 
-    btn.onclick = () => {
-      if (step < scenes.length) {
-        text.innerText = scenes[step].msg;
-        btn.innerText = scenes[step].btn;
-        step++;
+    function next() {
+      step++;
+      if (step < steps.length) {
+        document.getElementById('text').innerText = steps[step].text;
+        document.getElementById('buttons').innerHTML = `<button onclick=\"next()\">${steps[step].buttons[0]}</button>`;
+      } else {
+        startPoem();
       }
-    };
+    }
+
+    function startPoem() {
+      document.getElementById('music').play();
+      const poem = [
+        "[PUT YOUR POEM LINE 1 HERE]",
+        "[PUT YOUR POEM LINE 2 HERE]",
+        "[PUT YOUR POEM LINE 3 HERE]",
+        "[ADD AS MANY LINES AS YOU WANT]"
+      ];
+
+      let i = 0;
+      document.getElementById('buttons').innerHTML = "";
+
+      const interval = setInterval(() => {
+        document.getElementById('text').innerText = poem[i];
+        i++;
+        if (i >= poem.length) {
+          clearInterval(interval);
+          setTimeout(showFinal, 2000);
+        }
+      }, 2500);
+    }
+
+    function showFinal() {
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('final').style.display = 'flex';
+    }
+
+    function yes() {
+      alert("YAY 💖💖💖");
+    }
+
+    // Falling hearts
+    const hearts = document.getElementById('hearts');
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = '❤';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 4 + Math.random() * 3 + 's';
+      hearts.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }, 300);
   </script>
 </body>
 </html>
