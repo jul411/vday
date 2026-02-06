@@ -1,158 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valentine Surprise 💌</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine 💖</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Arial Rounded MT Bold", Arial, sans-serif;
-      background: radial-gradient(circle at top, #ffb6c1, #ff69b4);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      overflow: hidden;
-    }
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+}
 
-    .container {
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(12px);
-      padding: 30px;
-      border-radius: 30px;
-      box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
-      max-width: 420px;
-      text-align: center;
-    }
+.container {
+  background: rgba(255,255,255,0.2);
+  padding: 30px;
+  border-radius: 30px;
+  box-shadow: 0 0 40px rgba(255,105,180,0.8);
+  text-align: center;
+  max-width: 420px;
+  color: white;
+}
 
-    .character-wrapper {
-      width: 240px;
-      height: 220px; /* crops out GIF text */
-      overflow: hidden;
-      border-radius: 20px;
-      margin: 0 auto 20px;
-    }
+.character-box {
+  width: 240px;
+  height: 215px;
+  overflow: hidden;
+  border-radius: 20px;
+  margin: 0 auto 20px;
+}
 
-    .character {
-      width: 100%;
-      transform: translateY(-10px);
-    }
+.character-box img {
+  width: 100%;
+  transform: translateY(-15px);
+}
 
-    #text {
-      min-height: 90px;
-      font-size: 1.15rem;
-      margin-bottom: 15px;
-    }
+#text {
+  min-height: 90px;
+  font-size: 1.15rem;
+}
 
-    button {
-      background: #ff4f9a;
-      border: none;
-      color: white;
-      padding: 12px 22px;
-      font-size: 1rem;
-      border-radius: 25px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
+button {
+  background: #ff4f9a;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 12px;
+}
 
-    button:hover {
-      background: #ff2f84;
-    }
+button:hover {
+  background: #ff2f84;
+}
 
-    .final {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-    }
-  </style>
+.final {
+  display: none;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Background Music -->
-  <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a5c8f76a1.mp3" type="audio/mpeg">
-  </audio>
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a5c8f76a1.mp3">
+</audio>
 
-  <!-- MAIN SCENE -->
-  <div class="container" id="main">
-    <div class="character-wrapper">
-      <img class="character"
-        src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXQ1ODZwaDBiY3RrM20ybXQ1eHd1OGxlbW00MW1zOG9mNHAyd3phOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cOt4lNOelYkY0cHzLa/giphy.gif"
-        alt="cute character">
-    </div>
-
-    <div id="text">Oh hi… I didn’t see you there.</div>
-    <button id="btn" onclick="nextStep()">Hello</button>
+<div class="container" id="main">
+  <div class="character-box">
+    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXQ1ODZwaDBiY3RrM20ybXQ1eHd1OGxlbW00MW1zOG9mNHAyd3phOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cOt4lNOelYkY0cHzLa/giphy.gif">
   </div>
 
-  <!-- FINAL SCREEN -->
-  <div class="container final" id="finalScreen">
-    <h2>💖 Will you be my Valentine? 💖</h2>
-    <button onclick="yes()">Yes 💕</button>
-    <button onclick="yes()">Obviously 💘</button>
-  </div>
+  <div id="text">Oh hi… I didn’t see you there.</div>
+  <button onclick="next()">Hello</button>
+</div>
 
-  <script>
-    const scenes = [
-      { text: "Since you’re here… I have something to tell you.", button: "Oh cool, what is it?" },
-      { text: "It’s a poem.", button: "Can I hear it?" },
-      { text: "Okay… listen closely, mrrp~ 💗", button: "Read it" },
+<div class="container final" id="final">
+  <h2>💖 Will you be my Valentine? 💖</h2>
+  <button onclick="yes()">YES 💕</button>
+</div>
 
-      // 👇 REPLACE THESE WITH YOUR POEM LINES
-      { text: "[POEM LINE 1]", button: "Next" },
-      { text: "[POEM LINE 2]", button: "Next" },
-      { text: "[POEM LINE 3]", button: "Next" },
-      { text: "[POEM LINE 4]", button: "Next" }
-    ];
+<script>
+let step = 0;
+let voices = [];
 
-    let step = 0;
+speechSynthesis.onvoiceschanged = () => {
+  voices = speechSynthesis.getVoices();
+};
 
-    function speak(text) {
-      speechSynthesis.cancel();
+const scenes = [
+  "Since you’re here… I have something to tell you.",
+  "It’s a poem.",
+  "Okay… listen closely, nya~ 💗",
+  "[POEM LINE 1]",
+  "[POEM LINE 2]",
+  "[POEM LINE 3]",
+  "[POEM LINE 4]"
+];
 
-      const msg = new SpeechSynthesisUtterance(text);
-      const voices = speechSynthesis.getVoices();
+function speak(text) {
+  speechSynthesis.cancel();
 
-      const cuteVoice = voices.find(v =>
-        v.name.toLowerCase().includes("samantha") ||
-        v.name.toLowerCase().includes("female") ||
-        v.name.toLowerCase().includes("google")
-      );
+  const u = new SpeechSynthesisUtterance(text);
 
-      if (cuteVoice) msg.voice = cuteVoice;
+  const voice =
+    voices.find(v => v.name.includes("Samantha")) ||
+    voices.find(v => v.name.toLowerCase().includes("female")) ||
+    voices[0];
 
-      msg.pitch = 1.6;   // higher = cuter
-      msg.rate = 1.05;
-      msg.volume = 0.9;
+  if (voice) u.voice = voice;
 
-      speechSynthesis.speak(msg);
-    }
+  u.pitch = 1.8;   // VERY CUTE / CAT-LIKE
+  u.rate = 1.05;
+  u.volume = 1;
 
-    function nextStep() {
-      document.getElementById("bgMusic").play().catch(() => {});
+  speechSynthesis.speak(u);
+}
 
-      if (step < scenes.length) {
-        const scene = scenes[step];
-        document.getElementById("text").innerText = scene.text;
-        document.getElementById("btn").innerText = scene.button;
-        speak(scene.text);
-        step++;
-      } else {
-        document.getElementById("main").style.display = "none";
-        document.getElementById("finalScreen").style.display = "flex";
-        speak("Will you be my Valentine?");
-      }
-    }
+function next() {
+  // unlock audio
+  document.getElementById("music").play().catch(()=>{});
 
-    function yes() {
-      speak("Yay! You just made me the happiest little creature ever.");
-      alert("💘 YAYYY 💘");
-    }
-  </script>
+  if (step < scenes.length) {
+    document.getElementById("text").innerText = scenes[step];
+    speak(scenes[step]);
+    step++;
+  } else {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("final").style.display = "block";
+    speak("Will you be my Valentine?");
+  }
+}
+
+function yes() {
+  speak("Yayyy! You just made this little cat very happy!");
+  alert("💘 SHE SAID YES 💘");
+}
+</script>
 
 </body>
 </html>
