@@ -8,34 +8,42 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Arial Rounded MT Bold", Arial, sans-serif;
       background: radial-gradient(circle at top, #ffb6c1, #ff69b4);
-      color: #fff;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
+      color: white;
       overflow: hidden;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
       padding: 30px;
-      border-radius: 25px;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.7);
-      max-width: 500px;
+      border-radius: 30px;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
+      max-width: 420px;
+      text-align: center;
     }
 
-    img.character {
+    .character-wrapper {
       width: 240px;
-      margin-bottom: 20px;
+      height: 220px; /* crops out GIF text */
+      overflow: hidden;
+      border-radius: 20px;
+      margin: 0 auto 20px;
+    }
+
+    .character {
+      width: 100%;
+      transform: translateY(-10px);
     }
 
     #text {
-      min-height: 80px;
-      font-size: 1.2rem;
+      min-height: 90px;
+      font-size: 1.15rem;
       margin-bottom: 15px;
     }
 
@@ -43,9 +51,9 @@
       background: #ff4f9a;
       border: none;
       color: white;
-      padding: 10px 20px;
+      padding: 12px 22px;
       font-size: 1rem;
-      border-radius: 20px;
+      border-radius: 25px;
       cursor: pointer;
       margin-top: 8px;
     }
@@ -61,33 +69,40 @@
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Soft background music -->
+  <!-- Background Music -->
   <audio id="bgMusic" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a5c8f76a1.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- MAIN SCENE -->
   <div class="container" id="main">
-    <img class="character"
-      src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXQ1ODZwaDBiY3RrM20ybXQ1eHd1OGxlbW00MW1zOG9mNHAyd3phOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cOt4lNOelYkY0cHzLa/giphy.gif"
-      alt="cute talking character">
+    <div class="character-wrapper">
+      <img class="character"
+        src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXQ1ODZwaDBiY3RrM20ybXQ1eHd1OGxlbW00MW1zOG9mNHAyd3phOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cOt4lNOelYkY0cHzLa/giphy.gif"
+        alt="cute character">
+    </div>
 
     <div id="text">Oh hi… I didn’t see you there.</div>
-    <button onclick="nextStep()" id="btn">Hello</button>
+    <button id="btn" onclick="nextStep()">Hello</button>
   </div>
 
+  <!-- FINAL SCREEN -->
   <div class="container final" id="finalScreen">
     <h2>💖 Will you be my Valentine? 💖</h2>
     <button onclick="yes()">Yes 💕</button>
-    <button onclick="yes()">Yes obviously 💘</button>
+    <button onclick="yes()">Obviously 💘</button>
   </div>
 
   <script>
     const scenes = [
-      { text: "Since you’re here, I have something to tell you…", button: "Oh cool, what is it?" },
+      { text: "Since you’re here… I have something to tell you.", button: "Oh cool, what is it?" },
       { text: "It’s a poem.", button: "Can I hear it?" },
-      { text: "Okay… listen closely 💗", button: "Read the poem" },
+      { text: "Okay… listen closely, mrrp~ 💗", button: "Read it" },
+
+      // 👇 REPLACE THESE WITH YOUR POEM LINES
       { text: "[POEM LINE 1]", button: "Next" },
       { text: "[POEM LINE 2]", button: "Next" },
       { text: "[POEM LINE 3]", button: "Next" },
@@ -103,29 +118,22 @@
       const voices = speechSynthesis.getVoices();
 
       const cuteVoice = voices.find(v =>
-        v.name.toLowerCase().includes("female") ||
         v.name.toLowerCase().includes("samantha") ||
+        v.name.toLowerCase().includes("female") ||
         v.name.toLowerCase().includes("google")
       );
 
       if (cuteVoice) msg.voice = cuteVoice;
 
-      msg.pitch = 1.3;
-      msg.rate = 0.9;
+      msg.pitch = 1.6;   // higher = cuter
+      msg.rate = 1.05;
+      msg.volume = 0.9;
 
       speechSynthesis.speak(msg);
     }
 
-    function playMusic() {
-      const music = document.getElementById("bgMusic");
-      if (music.paused) {
-        music.volume = 0.4;
-        music.play().catch(() => {});
-      }
-    }
-
     function nextStep() {
-      playMusic();
+      document.getElementById("bgMusic").play().catch(() => {});
 
       if (step < scenes.length) {
         const scene = scenes[step];
@@ -135,14 +143,14 @@
         step++;
       } else {
         document.getElementById("main").style.display = "none";
-        document.getElementById("finalScreen").style.display = "block";
+        document.getElementById("finalScreen").style.display = "flex";
         speak("Will you be my Valentine?");
       }
     }
 
     function yes() {
-      speak("Yay! You just made me the happiest person ever.");
-      alert("💘 YAY! 💘");
+      speak("Yay! You just made me the happiest little creature ever.");
+      alert("💘 YAYYY 💘");
     }
   </script>
 
