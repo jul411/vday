@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hi There 💌</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 400px;
+      animation: fadeIn 1s ease;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #ff69b4;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff1493;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <p id="text">Oh hi… I didn’t see you there 👀</p>
+    <button id="btn">Hello</button>
+  </div>
+
+  <script>
+    const text = document.getElementById("text");
+    const btn = document.getElementById("btn");
+
+    const scenes = [
+      { msg: "Since you’re here, I have something to tell you…", btn: "Oh cool, what is it?" },
+      { msg: "It’s a poem 💖", btn: "Can I hear it?" },
+      { msg: "Sure…", btn: "✨" },
+      { msg: "[PUT YOUR POEM HERE]\n\n(line 1)\n(line 2)\n(line 3)", btn: "❤️" },
+      { msg: "Will you be my Valentine? 💘", btn: "Yes 💕" }
+    ];
+
+    let step = 0;
+
+    btn.onclick = () => {
+      if (step < scenes.length) {
+        text.innerText = scenes[step].msg;
+        btn.innerText = scenes[step].btn;
+        step++;
+      }
+    };
+  </script>
+</body>
+</html>
