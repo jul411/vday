@@ -38,6 +38,11 @@ body {
   transform: translateY(-15px);
 }
 
+#text {
+  min-height: 70px;
+  font-size: 1.15rem;
+}
+
 button {
   margin-top: 15px;
   padding: 12px 26px;
@@ -67,17 +72,17 @@ button:hover {
 </div>
 
 <script>
-const lines = [
-  "Oh hi… I didn’t see you there.",
-  "Since you're here… I have something to tell you.",
-  "It's a poem.",
-  "Okay… listen closely, nya~",
-  "💖 [YOUR POEM LINE 1] 💖",
-  "💖 [YOUR POEM LINE 2] 💖",
-  "Will you be my Valentine?"
+const scenes = [
+  { text: "Oh hi… I didn’t see you there.", btn: "Hello" },
+  { text: "Since you're here, I have something to tell you.", btn: "Oh? What is it?" },
+  { text: "It’s a poem.", btn: "Can I hear it?" },
+  { text: "Okay… listen closely 💖", btn: "Read it" },
+  { text: "💖 [YOUR POEM LINE 1] 💖", btn: "Next" },
+  { text: "💖 [YOUR POEM LINE 2] 💖", btn: "Next" },
+  { text: "Will you be my Valentine?", btn: "YES 💕" }
 ];
 
-let index = 0;
+let step = 0;
 let voices = [];
 
 // Load voices safely
@@ -90,36 +95,37 @@ loadVoices();
 function speak(text) {
   speechSynthesis.cancel();
 
-  const utter = new SpeechSynthesisUtterance(text);
+  const msg = new SpeechSynthesisUtterance(text);
 
-  // Pick cutest available voice
   const cuteVoice =
     voices.find(v => v.name.includes("Samantha")) ||
     voices.find(v => v.name.toLowerCase().includes("female")) ||
     voices[0];
 
-  if (cuteVoice) utter.voice = cuteVoice;
+  if (cuteVoice) msg.voice = cuteVoice;
 
-  utter.pitch = 1.9; // cat-like
-  utter.rate = 1.05;
+  msg.pitch = 1.7;   // cute / cat-like
+  msg.rate = 0.95;
 
-  speechSynthesis.speak(utter);
+  speechSynthesis.speak(msg);
 }
 
-document.getElementById("btn").onclick = () => {
-  speak(lines[index]);
-  document.getElementById("text").innerText = lines[index];
-
-  index++;
-
-  if (index >= lines.length) {
-    document.getElementById("btn").innerText = "YES 💕";
-  } else if (index === lines.length - 1) {
-    document.getElementById("btn").innerText = "Continue 💖";
-  } else {
-    document.getElementById("btn").innerText = "Next";
+document.getElementById("btn").addEventListener("click", () => {
+  // Final YES screen
+  if (step >= scenes.length) {
+    document.getElementById("text").innerText =
+      "You’ve made me the happiest cat ever 💕";
+    document.getElementById("btn").style.display = "none";
+    speak("You’ve made me the happiest cat ever");
+    return;
   }
-};
+
+  const scene = scenes[step];
+  document.getElementById("text").innerText = scene.text;
+  document.getElementById("btn").innerText = scene.btn;
+  speak(scene.text);
+  step++;
+});
 </script>
 
 </body>
